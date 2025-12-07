@@ -4,9 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
+@NamedQueries({ 
+	@NamedQuery(name = "Emission.getEmission", query = "select o from Emission o where o.id = :id")})
+
+@XmlRootElement(name = "Emission")
 @Entity
-public class Emissions {
+public class Emission {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +22,11 @@ public class Emissions {
 	private Double value; 
 	private int year;
 	
-	public Emissions() {
+	public Emission() {
 		
 	}
 	
-	public Emissions(String category, String gasUnits, String scenario, Double value, int year) {
+	public Emission(String category, String gasUnits, String scenario, Double value, int year) {
 		this.category = category;
 		this.gasUnits = gasUnits;
 		this.scenario = scenario;
