@@ -1,4 +1,4 @@
-package com.jenningsdev;
+package com.jenningsdev.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,16 +17,26 @@ import org.xml.sax.SAXException;
 
 import com.jenningsdev.dao.GenericDAO;
 import com.jenningsdev.entities.Emission;
+import com.jenningsdev.entities.User;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
-public class ReadData {
+@ApplicationScoped
+public class EmissionsService {
+	@Inject
+    EntityManager em; 
 	
-	public void readXml() throws ParserConfigurationException, SAXException, IOException {
-		GenericDAO dao = new GenericDAO();
+	GenericDAO dao = new GenericDAO();
+	
+	@Transactional
+	public String readXmlData() throws ParserConfigurationException, SAXException, IOException {
 		File xmlFile = new File("GreenhouseGasEmissionsPredicted2025.xml");
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -67,20 +77,16 @@ public class ReadData {
                        
                 if(value > 0 && scenario.equals("WEM") && year == 2023) {
                 	Emission emission = new Emission(category, gasUnits, scenario, value, year);
-                	dao.persist(emission);
-                	System.out.println("Category: " + category);
-                    System.out.println("Year: " + year);
-                    System.out.println("Scenario: " + scenario);
-                    System.out.println("gasUnits: " + gasUnits);
-                    System.out.println("value: " + value);
-                    System.out.println("---------------------------------");
+                	em.persist(emission);
                 }
             }
         }
+        return "DB Populated!";
 	}
 	
-	public void readJson() throws FileNotFoundException {
-        FileInputStream fis = new FileInputStream("GreenhouseGasEmissions2025.json");
+	@Transactional
+	public String readJsonData() throws FileNotFoundException {
+		FileInputStream fis = new FileInputStream("GreenhouseGasEmissions2025.json");
         
         JsonReader jsonReader = Json.createReader(fis);
         JsonArray emissionsArray = jsonReader.readObject().getJsonArray("Emissions");
@@ -93,11 +99,53 @@ public class ReadData {
             System.out.println("Value: " + emissionObj.get("Value"));
             System.out.println("---------------------------------");
         }
-
+        return "DB Populated!";
 	}
 	
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-		ReadData readData = new ReadData();
-		readData.readJson();
+	@Transactional 
+	public User getUser(int userId) {
+		return dao.getUser(userId);		
 	}
+	
+	@Transactional
+	public String addUser(User user) {
+		em.persist(user);
+		return "User registered: " + user.getEmail();
+	}
+	
+	@Transactional
+	public User updateUser(User user){
+		return em.merge(user);	
+    }
+	
+	@Transactional
+	public String deleteUser(int userId){
+		User user = dao.getUser(userId);
+		em.remove(user);
+		return "User " + userId +" deleted";
+    }
+	
+	@Transactional
+	public Emission getEmission(int emissionId){
+		return dao.getEmission(emissionId);		
+    }
+	
+	@Transactional
+	public String addEmission(Emission emission) {
+		em.persist(emission);
+		return "Emission created: " + emission.getId();
+	}
+	
+	@Transactional
+    public Emission updateEmission(Emission emission){
+		return (Emission) em.merge(emission);	
+	}
+	
+	@Transactional
+	public String deleteEmission(int emissionId){
+		Emission emission = dao.getEmission(emissionId);
+		em.remove(emission);
+		return "Emission " + emissionId + " deleted";
+    }
 }
+
