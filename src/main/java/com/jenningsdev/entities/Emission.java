@@ -19,21 +19,23 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 public class Emission {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	
     private int id;
-	private String category, gasUnits, scenario;
-	private Double value; 
+	private String category, gasUnits, scenario, description;
+	private double predictedValue, actualValue; 
 	private int year;
 	
 	public Emission() {
 		
 	}
 	
-	public Emission(String category, String gasUnits, String scenario, Double value, int year) {
+	public Emission(String category, String gasUnits, String scenario, double predictedValue, double actualValue, int year) {
 		this.category = category;
 		this.gasUnits = gasUnits;
 		this.scenario = scenario;
-		this.value = value;
+		this.predictedValue = predictedValue;
+		this.actualValue = actualValue;
 		this.year = year;
 	}
 
@@ -68,13 +70,29 @@ public class Emission {
 	public void setScenario(String scenario) {
 		this.scenario = scenario;
 	}
-
-	public Double getValue() {
-		return value;
+	
+	public String getDescription() {
+		return description;
 	}
 
-	public void setValue(Double value) {
-		this.value = value;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Double getPredictedValue() {
+		return predictedValue;
+	}
+
+	public void setPredictedValue(Double value) {
+		this.predictedValue = value;
+	}
+
+	public Double getActualValue() {
+		return actualValue;
+	}
+
+	public void setActualValue(Double actualValue) {
+		this.actualValue = actualValue;
 	}
 
 	public int getYear() {

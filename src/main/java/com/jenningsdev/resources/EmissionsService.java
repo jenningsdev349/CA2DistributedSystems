@@ -16,7 +16,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.jenningsdev.dao.GenericDAO;
 import com.jenningsdev.entities.Emission;
 import com.jenningsdev.entities.User;
 
@@ -75,7 +74,7 @@ public class EmissionsService {
                 String gasUnits = node5.getTextContent();   
                        
                 if(value > 0 && scenario.equals("WEM") && year == 2023) {
-                	Emission emission = new Emission(category, gasUnits, scenario, value, year);
+                	Emission emission = new Emission(category, gasUnits, scenario, value, 0.0, year);
                 	em.persist(emission);
                 }
             }
@@ -89,16 +88,22 @@ public class EmissionsService {
         
         JsonReader jsonReader = Json.createReader(fis);
         JsonArray emissionsArray = jsonReader.readObject().getJsonArray("Emissions");
+        String category, gasUnits;
+        double actualValue;
+        List<Emission> emissions = getAllEmissions();
         
-        
-        for (Object object : emissionsArray) {
-            JsonObject emissionObj = (JsonObject) object;
-            System.out.println("Category: " + emissionObj.get("Category"));
-            System.out.println("Gas Units: " + emissionObj.get("Gas Units"));
-            System.out.println("Value: " + emissionObj.get("Value"));
-            System.out.println("---------------------------------");
+        for (Emission e : emissions) {
+        	for (Object object : emissionsArray) {
+                JsonObject emissionObject = (JsonObject) object;
+                category = emissionObject.getString("Category");
+                gasUnits = emissionObject.getString("Gas Units");
+                actualValue = emissionObject.getJsonNumber("Value").doubleValue();
+                if(e.getCategory().equals(category) && e.getGasUnits().equals(gasUnits)) {
+                	e.setActualValue(actualValue);
+                }
+            }
         }
-        return "DB Populated!";
+        return "DB Updated!";
 	}
 	
 	@Transactional 

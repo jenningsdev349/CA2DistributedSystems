@@ -15,7 +15,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.jenningsdev.dao.GenericDAO;
 import com.jenningsdev.entities.Emission;
 
 import jakarta.json.Json;
@@ -26,7 +25,6 @@ import jakarta.json.JsonReader;
 public class ReadData {
 	
 	public void readXml() throws ParserConfigurationException, SAXException, IOException {
-		GenericDAO dao = new GenericDAO();
 		File xmlFile = new File("GreenhouseGasEmissionsPredicted2025.xml");
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -66,8 +64,7 @@ public class ReadData {
                 String gasUnits = node5.getTextContent();   
                        
                 if(value > 0 && scenario.equals("WEM") && year == 2023) {
-                	Emission emission = new Emission(category, gasUnits, scenario, value, year);
-                	dao.persist(emission);
+                	Emission emission = new Emission(category, gasUnits, scenario, value, 0.0, year);
                 	System.out.println("Category: " + category);
                     System.out.println("Year: " + year);
                     System.out.println("Scenario: " + scenario);

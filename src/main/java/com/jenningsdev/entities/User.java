@@ -16,7 +16,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	int id;
 	
 	private String email, password;
