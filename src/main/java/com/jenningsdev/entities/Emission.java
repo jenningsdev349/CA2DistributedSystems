@@ -8,8 +8,11 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@NamedQueries({ 
-	@NamedQuery(name = "Emission.getEmission", query = "select o from Emission o where o.id = :id")})
+@NamedQueries({
+	@NamedQuery(name = "Emission.getAllEmissions", query = "select o from Emission o"),
+	@NamedQuery(name = "Emission.getAllEmissionsByCategory", query = "select o from Emission o ORDER BY o.category DESC"),
+	@NamedQuery(name = "Emission.getEmission", query = "select o from Emission o where o.id = :id")}
+)
 
 @XmlRootElement(name = "Emission")
 @Entity

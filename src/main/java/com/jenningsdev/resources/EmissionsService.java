@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,9 +33,7 @@ import jakarta.transaction.Transactional;
 public class EmissionsService {
 	@Inject
     EntityManager em; 
-	
-	GenericDAO dao = new GenericDAO();
-	
+		
 	@Transactional
 	public String readXmlData() throws ParserConfigurationException, SAXException, IOException {
 		File xmlFile = new File("GreenhouseGasEmissionsPredicted2025.xml");
@@ -104,7 +103,11 @@ public class EmissionsService {
 	
 	@Transactional 
 	public User getUser(int userId) {
-		return dao.getUser(userId);		
+		return em.createNamedQuery("User.getUser", User.class)
+	             .setParameter("id", userId)
+	             .getResultStream()
+	             .findFirst()
+	             .orElse(null);
 	}
 	
 	@Transactional
@@ -120,15 +123,35 @@ public class EmissionsService {
 	
 	@Transactional
 	public String deleteUser(int userId){
-		User user = dao.getUser(userId);
+		User user = em.createNamedQuery("User.getUser", User.class)
+	             .setParameter("id", userId)
+	             .getResultStream()
+	             .findFirst()
+	             .orElse(null);
 		em.remove(user);
-		return "User " + userId +" deleted";
+		return "User " + userId + " deleted";
     }
 	
 	@Transactional
 	public Emission getEmission(int emissionId){
-		return dao.getEmission(emissionId);		
+		return em.createNamedQuery("Emission.getEmission", Emission.class)
+	             .setParameter("id", emissionId)
+	             .getResultStream()
+	             .findFirst()
+	             .orElse(null);	
     }
+	
+	@Transactional
+	public List<Emission> getAllEmissions(){
+		return em.createNamedQuery("Emission.getAllEmissions", Emission.class)
+				.getResultList();
+	}
+	
+	@Transactional
+	public List<Emission> getAllEmissionsByCategory(){
+		return em.createNamedQuery("Emission.getAllEmissionsByCategory", Emission.class)
+				.getResultList();
+	}
 	
 	@Transactional
 	public String addEmission(Emission emission) {
@@ -143,7 +166,11 @@ public class EmissionsService {
 	
 	@Transactional
 	public String deleteEmission(int emissionId){
-		Emission emission = dao.getEmission(emissionId);
+		Emission emission = em.createNamedQuery("Emission.getEmission", Emission.class)
+	             .setParameter("id", emissionId)
+	             .getResultStream()
+	             .findFirst()
+	             .orElse(null);	
 		em.remove(emission);
 		return "Emission " + emissionId + " deleted";
     }

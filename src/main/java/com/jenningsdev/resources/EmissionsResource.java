@@ -11,6 +11,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -22,7 +23,6 @@ import com.jenningsdev.entities.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-
 @Path("/emissions")
 @ApplicationScoped
 public class EmissionsResource {
@@ -32,7 +32,7 @@ public class EmissionsResource {
 	
 	@GET
     @Path("/users/{userId}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public User getUser(@PathParam("userId")int userId){
 		return emissionsService.getUser(userId);
 	}
@@ -73,11 +73,25 @@ public class EmissionsResource {
 	}
 	
 	@GET
-    @Path("/{emissionId}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/getEmission/{emissionId}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Emission getEmission(@PathParam("emissionId")int emissionId){
 		return emissionsService.getEmission(emissionId);
     }
+	
+	@GET
+	@Path("/getAllEmissions")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Emission> getAllEmissions(){
+		return emissionsService.getAllEmissions();
+	}
+	
+	@GET
+	@Path("/getAllEmissionsByCategory")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Emission> getAllEmissionsByCategory(){
+		return emissionsService.getAllEmissionsByCategory();
+	}
 	
 	@POST
 	@Path("/addEmission")
@@ -87,14 +101,14 @@ public class EmissionsResource {
 	}
 	
 	@PUT
-    @Path("/{emissionId}")
+    @Path("/updateEmission/{emissionId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Emission updateEmission(Emission emission){
 		return emissionsService.updateEmission(emission);
     }
 	
 	@DELETE
-    @Path("/{emissionId}")
+    @Path("/deleteEmission/{emissionId}")
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteEmission(@PathParam("emissionId")int emissionId){
 		return emissionsService.deleteEmission(emissionId);
