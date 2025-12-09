@@ -115,10 +115,29 @@ public class EmissionsService {
 	             .orElse(null);
 	}
 	
+	@Transactional 
+	public List<User> getAllUsers() {
+		return em.createNamedQuery("User.getAllUsers", User.class)
+	             .getResultList();
+	}
+	
 	@Transactional
 	public String addUser(User user) {
 		em.persist(user);
 		return "User registered: " + user.getEmail();
+	}
+	
+	@Transactional
+	public String login(String email, String password) {
+		List<User> users = getAllUsers();
+		
+		for(User u : users) {
+			if(u.getEmail().equals(email) && u.getPassword().equals(password)) {
+				u.setLoggedIn(true);
+				return "Logged in!";
+			}
+		}
+		return "User does not exist!";
 	}
 	
 	@Transactional

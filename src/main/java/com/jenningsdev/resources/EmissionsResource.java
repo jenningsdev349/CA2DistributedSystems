@@ -39,9 +39,16 @@ public class EmissionsResource {
 	
 	@POST
 	@Path("/register")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public String addUser(User user) {
 		return emissionsService.addUser(user);
+	}
+	
+	@POST
+	@Path("login/{email}/{password}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String login(@PathParam("email") String email, @PathParam("password") String password) {
+		return emissionsService.login(email, password);
 	}
 	
 	@PUT
@@ -73,29 +80,47 @@ public class EmissionsResource {
 	}
 	
 	@GET
-    @Path("/getEmission/{emissionId}")
+    @Path("/getEmission/{userId}/{emissionId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Emission getEmission(@PathParam("emissionId")int emissionId){
-		return emissionsService.getEmission(emissionId);
+    public Emission getEmission(@PathParam("userId")int userId, @PathParam("emissionId")int emissionId){
+		User user = getUser(userId);
+		if(user.isLoggedIn()) {
+			return emissionsService.getEmission(emissionId);
+		}
+		else {
+			return null;
+		}
     }
 	
 	@GET
-	@Path("/getAllEmissions")
+	@Path("/getAllEmissions/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Emission> getAllEmissions(){
-		return emissionsService.getAllEmissions();
+	public List<Emission> getAllEmissions(@PathParam("userId")int userId){
+		User user = getUser(userId);
+		if(user.isLoggedIn()) {
+			return emissionsService.getAllEmissions();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@GET
-	@Path("/getAllEmissionsByCategory")
+	@Path("/getAllEmissionsByCategory/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Emission> getAllEmissionsByCategory(){
-		return emissionsService.getAllEmissionsByCategory();
+	public List<Emission> getAllEmissionsByCategory(@PathParam("userId")int userId){
+		User user = getUser(userId);
+		if(user.isLoggedIn()) {
+			return emissionsService.getAllEmissionsByCategory();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@POST
 	@Path("/addEmission")
-	@Consumes(MediaType.TEXT_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public String addEmission(Emission emission) {
 		return emissionsService.addEmission(emission);
 	}

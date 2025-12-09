@@ -9,6 +9,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @NamedQueries({ 
+	@NamedQuery(name = "User.getAllUsers", query = "select o from User o"),
 	@NamedQuery(name = "User.getUser", query = "select o from User o where o.id = :id")})
 
 @XmlRootElement(name = "User")
@@ -20,9 +21,9 @@ public class User {
 	int id;
 	
 	private String email, password;
+	private boolean isLoggedIn;
 	
 	public User() {
-		
 	}
 	
 	public User(String email, String password) {
@@ -53,4 +54,14 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
+
+	public void setLoggedIn(boolean isLoggedIn) {
+		this.isLoggedIn = isLoggedIn;
+	}
+	
+	
 }
