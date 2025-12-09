@@ -52,7 +52,7 @@ public class EmissionsResource {
 	}
 	
 	@PUT
-    @Path("/updateUser/{userId}")
+    @Path("/updateUser")
     @Produces(MediaType.APPLICATION_JSON)
     public User updateEmployee(User user){
 		return emissionsService.updateUser(user);
@@ -140,7 +140,7 @@ public class EmissionsResource {
 	}
 	
 	@PUT
-    @Path("/updateEmission/{emissionId}")
+    @Path("/updateEmission")
     @Produces(MediaType.APPLICATION_JSON)
     public Emission updateEmission(Emission emission){
 		return emissionsService.updateEmission(emission);
