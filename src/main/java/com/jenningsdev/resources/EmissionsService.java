@@ -198,5 +198,12 @@ public class EmissionsService {
 		em.remove(emission);
 		return "Emission " + emissionId + " deleted";
     }
+	
+	@Transactional
+	public String approveEmission(int emissionId, boolean flag) {
+	    Emission emission = getEmission(emissionId);
+	    emission.setFinal(flag);
+	    return "Emission approved!";
+	}
 }
 

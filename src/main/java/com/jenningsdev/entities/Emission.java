@@ -25,6 +25,7 @@ public class Emission {
 	private String category, gasUnits, scenario, description;
 	private double predictedValue, actualValue; 
 	private int year;
+	private boolean isFinal;
 	
 	public Emission() {
 		
@@ -79,22 +80,6 @@ public class Emission {
 		this.description = description;
 	}
 
-	public Double getPredictedValue() {
-		return predictedValue;
-	}
-
-	public void setPredictedValue(Double value) {
-		this.predictedValue = value;
-	}
-
-	public Double getActualValue() {
-		return actualValue;
-	}
-
-	public void setActualValue(Double actualValue) {
-		this.actualValue = actualValue;
-	}
-
 	public int getYear() {
 		return year;
 	}
@@ -102,6 +87,28 @@ public class Emission {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	
-	
+
+	public double getPredictedValue() {
+		return predictedValue;
+	}
+
+	public void setPredictedValue(double predictedValue) {
+		this.predictedValue = predictedValue;
+	}
+
+	public double getActualValue() {
+		return actualValue;
+	}
+
+	public void setActualValue(double actualValue) {
+		this.actualValue = actualValue;
+	}
+
+	public boolean isFinal() {
+		return isFinal;
+	}
+
+	public void setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
+	}
 }

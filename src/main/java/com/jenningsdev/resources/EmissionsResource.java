@@ -119,6 +119,13 @@ public class EmissionsResource {
 	}
 	
 	@POST
+	@Path("/approveEmission/{emissionId}/{flag}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String approveEmission(@PathParam("emissionId")int emissionId, @PathParam("flag")boolean flag) {
+		return emissionsService.approveEmission(emissionId, flag);
+	}
+	
+	@POST
 	@Path("/addEmission")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String addEmission(Emission emission) {
