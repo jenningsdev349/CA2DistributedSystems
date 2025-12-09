@@ -31,10 +31,11 @@ public class Emission {
 		
 	}
 	
-	public Emission(String category, String gasUnits, String scenario, double predictedValue, double actualValue, int year) {
+	public Emission(String category, String gasUnits, String scenario, String description, double predictedValue, double actualValue, int year) {
 		this.category = category;
 		this.gasUnits = gasUnits;
 		this.scenario = scenario;
+		this.description = description;
 		this.predictedValue = predictedValue;
 		this.actualValue = actualValue;
 		this.year = year;

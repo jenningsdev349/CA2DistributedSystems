@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -74,7 +75,7 @@ public class EmissionsService {
                 String gasUnits = node5.getTextContent();   
                        
                 if(value > 0 && scenario.equals("WEM") && year == 2023) {
-                	Emission emission = new Emission(category, gasUnits, scenario, value, 0.0, year);
+                	Emission emission = new Emission(category, gasUnits, scenario, "", value, 0.0, year);
                 	em.persist(emission);
                 }
             }
@@ -204,6 +205,30 @@ public class EmissionsService {
 	    Emission emission = getEmission(emissionId);
 	    emission.setFinal(flag);
 	    return "Emission approved!";
+	}
+	
+	@Transactional
+	public String getDescriptions() {
+		List<Emission> emissions = getAllEmissions();
+		
+			org.jsoup.nodes.Document doc;
+			String descriptionText = "";
+		    try {
+		        doc = Jsoup.connect("https://www.ipcc-nggip.iges.or.jp/EFDB/find_ef.php?ipcc_code=").get();
+		        org.jsoup.nodes.Element outerTable = doc.select("body > table").first();
+		        org.jsoup.nodes.Element outerTd = outerTable.select("td").first();
+		        org.jsoup.nodes.Element span = outerTd.select("span#spnOutput").first();
+		        org.jsoup.nodes.Element innerTable = span.select("table.list").first();
+		        org.jsoup.nodes.Element innerTr = innerTable.select("tr:nth-child(4)").first();
+		        org.jsoup.nodes.Element finalTd = innerTr.select("td:nth-child(8)").first();
+		        descriptionText = finalTd.text();
+		        for(Emission e : emissions) { 
+		        	e.setDescription(descriptionText);
+		        }
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		return "Table parsed!";
 	}
 }
 

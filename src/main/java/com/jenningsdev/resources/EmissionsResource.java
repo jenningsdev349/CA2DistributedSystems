@@ -80,6 +80,13 @@ public class EmissionsResource {
 	}
 	
 	@GET
+	@Path("/getDescriptions")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getDescriptions() {
+		return emissionsService.getDescriptions();
+	}
+	
+	@GET
     @Path("/getEmission/{userId}/{emissionId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Emission getEmission(@PathParam("userId")int userId, @PathParam("emissionId")int emissionId){
